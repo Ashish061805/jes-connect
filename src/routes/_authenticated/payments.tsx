@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { BadgeIndianRupee, Clock, Receipt } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
 import { StatCard } from "@/components/StatCard";
 import { StatusBadge } from "@/components/StatusBadge";
@@ -85,9 +86,9 @@ function PaymentsPage() {
   return (
     <AppShell title="Payments" description="All membership fees and renewals">
       <div className="grid gap-4 sm:grid-cols-3">
-        <StatCard label="Collected" value={formatCurrency(total)} />
-        <StatCard label="Transactions" value={String(rows.length)} />
-        <StatCard label="Pending" value={String(pending)} />
+        <StatCard label="Collected" value={formatCurrency(total)} icon={BadgeIndianRupee} tone="success" />
+        <StatCard label="Transactions" value={String(rows.length)} icon={Receipt} />
+        <StatCard label="Pending" value={String(pending)} icon={Clock} tone="warning" />
       </div>
 
       <div className="surface-card mt-4 grid gap-3 p-4 md:grid-cols-4">

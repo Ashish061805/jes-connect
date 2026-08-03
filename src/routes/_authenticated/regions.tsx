@@ -47,7 +47,7 @@ function RegionsPage() {
   const admin = me?.admin;
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({ name: "", code: "", city: "", state: "Jharkhand" });
+  const [form, setForm] = useState({ name: "", code: "", city: "", description: "" });
   const [saving, setSaving] = useState(false);
 
   async function create() {
@@ -58,7 +58,7 @@ function RegionsPage() {
         name: form.name,
         code: form.code.toUpperCase(),
         city: form.city || null,
-        state: form.state || null,
+        description: form.description || null,
       });
       if (error) throw error;
       await logAudit({
@@ -69,7 +69,7 @@ function RegionsPage() {
         entityType: "region",
       });
       toast.success("Region created");
-      setForm({ name: "", code: "", city: "", state: "Jharkhand" });
+      setForm({ name: "", code: "", city: "", description: "" });
       setOpen(false);
       queryClient.invalidateQueries({ queryKey: ["regions"] });
     } catch (error) {
@@ -81,7 +81,10 @@ function RegionsPage() {
 
   async function toggle(id: string, isActive: boolean) {
     const { error } = await supabase.from("regions").update({ is_active: isActive }).eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     queryClient.invalidateQueries({ queryKey: ["regions"] });
   }
 
@@ -102,7 +105,7 @@ function RegionsPage() {
               <TableHead>Name</TableHead>
               <TableHead>Code</TableHead>
               <TableHead>City</TableHead>
-              <TableHead>State</TableHead>
+              <TableHead>Description</TableHead>
               <TableHead>Created</TableHead>
               <TableHead>Active</TableHead>
             </TableRow>
@@ -113,7 +116,7 @@ function RegionsPage() {
                 <TableCell className="font-medium">{r.name}</TableCell>
                 <TableCell className="font-mono text-xs">{r.code}</TableCell>
                 <TableCell>{r.city ?? "—"}</TableCell>
-                <TableCell>{r.state ?? "—"}</TableCell>
+                <TableCell>{r.description ?? "—"}</TableCell>
                 <TableCell>{formatDate(r.created_at)}</TableCell>
                 <TableCell>
                   <Switch checked={r.is_active} onCheckedChange={(v) => toggle(r.id, v)} />
@@ -158,8 +161,11 @@ function RegionsPage() {
                 <Input value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} />
               </div>
               <div className="space-y-2">
-                <Label>State</Label>
-                <Input value={form.state} onChange={(e) => setForm({ ...form, state: e.target.value })} />
+                <Label>Description</Label>
+                <Input
+                  value={form.description}
+                  onChange={(e) => setForm({ ...form, description: e.target.value })}
+                />
               </div>
             </div>
           </div>
