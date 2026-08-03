@@ -12,10 +12,12 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedAdminsRouteImport } from './routes/_authenticated/admins'
 import { Route as AuthenticatedAuditLogsRouteImport } from './routes/_authenticated/audit-logs'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedPaymentsRouteImport } from './routes/_authenticated/payments'
 import { Route as AuthenticatedRegionsRouteImport } from './routes/_authenticated/regions'
+import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
 import { Route as AuthenticatedMembersIndexRouteImport } from './routes/_authenticated/members/index'
 import { Route as AuthenticatedMembersIdRouteImport } from './routes/_authenticated/members/$id'
 import { Route as AuthenticatedMembersNewRouteImport } from './routes/_authenticated/members/new'
@@ -33,6 +35,11 @@ const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAdminsRoute = AuthenticatedAdminsRouteImport.update({
+  id: '/admins',
+  path: '/admins',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedAuditLogsRoute = AuthenticatedAuditLogsRouteImport.update({
   id: '/audit-logs',
@@ -52,6 +59,11 @@ const AuthenticatedPaymentsRoute = AuthenticatedPaymentsRouteImport.update({
 const AuthenticatedRegionsRoute = AuthenticatedRegionsRouteImport.update({
   id: '/regions',
   path: '/regions',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedReportsRoute = AuthenticatedReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedMembersIndexRoute =
@@ -74,10 +86,12 @@ const AuthenticatedMembersNewRoute = AuthenticatedMembersNewRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/admins': typeof AuthenticatedAdminsRoute
   '/audit-logs': typeof AuthenticatedAuditLogsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/payments': typeof AuthenticatedPaymentsRoute
   '/regions': typeof AuthenticatedRegionsRoute
+  '/reports': typeof AuthenticatedReportsRoute
   '/members/$id': typeof AuthenticatedMembersIdRoute
   '/members/new': typeof AuthenticatedMembersNewRoute
   '/members/': typeof AuthenticatedMembersIndexRoute
@@ -85,10 +99,12 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/admins': typeof AuthenticatedAdminsRoute
   '/audit-logs': typeof AuthenticatedAuditLogsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/payments': typeof AuthenticatedPaymentsRoute
   '/regions': typeof AuthenticatedRegionsRoute
+  '/reports': typeof AuthenticatedReportsRoute
   '/members/$id': typeof AuthenticatedMembersIdRoute
   '/members/new': typeof AuthenticatedMembersNewRoute
   '/members': typeof AuthenticatedMembersIndexRoute
@@ -98,10 +114,12 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_authenticated/admins': typeof AuthenticatedAdminsRoute
   '/_authenticated/audit-logs': typeof AuthenticatedAuditLogsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/payments': typeof AuthenticatedPaymentsRoute
   '/_authenticated/regions': typeof AuthenticatedRegionsRoute
+  '/_authenticated/reports': typeof AuthenticatedReportsRoute
   '/_authenticated/members/$id': typeof AuthenticatedMembersIdRoute
   '/_authenticated/members/new': typeof AuthenticatedMembersNewRoute
   '/_authenticated/members/': typeof AuthenticatedMembersIndexRoute
@@ -111,10 +129,12 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/admins'
     | '/audit-logs'
     | '/dashboard'
     | '/payments'
     | '/regions'
+    | '/reports'
     | '/members/$id'
     | '/members/new'
     | '/members/'
@@ -122,10 +142,12 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/admins'
     | '/audit-logs'
     | '/dashboard'
     | '/payments'
     | '/regions'
+    | '/reports'
     | '/members/$id'
     | '/members/new'
     | '/members'
@@ -134,10 +156,12 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/_authenticated/admins'
     | '/_authenticated/audit-logs'
     | '/_authenticated/dashboard'
     | '/_authenticated/payments'
     | '/_authenticated/regions'
+    | '/_authenticated/reports'
     | '/_authenticated/members/$id'
     | '/_authenticated/members/new'
     | '/_authenticated/members/'
@@ -172,6 +196,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admins': {
+      id: '/_authenticated/admins'
+      path: '/admins'
+      fullPath: '/admins'
+      preLoaderRoute: typeof AuthenticatedAdminsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/audit-logs': {
       id: '/_authenticated/audit-logs'
       path: '/audit-logs'
@@ -200,6 +231,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRegionsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/reports': {
+      id: '/_authenticated/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof AuthenticatedReportsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/members/': {
       id: '/_authenticated/members/'
       path: '/members'
@@ -225,20 +263,24 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminsRoute: typeof AuthenticatedAdminsRoute
   AuthenticatedAuditLogsRoute: typeof AuthenticatedAuditLogsRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedPaymentsRoute: typeof AuthenticatedPaymentsRoute
   AuthenticatedRegionsRoute: typeof AuthenticatedRegionsRoute
+  AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
   AuthenticatedMembersIdRoute: typeof AuthenticatedMembersIdRoute
   AuthenticatedMembersNewRoute: typeof AuthenticatedMembersNewRoute
   AuthenticatedMembersIndexRoute: typeof AuthenticatedMembersIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminsRoute: AuthenticatedAdminsRoute,
   AuthenticatedAuditLogsRoute: AuthenticatedAuditLogsRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedPaymentsRoute: AuthenticatedPaymentsRoute,
   AuthenticatedRegionsRoute: AuthenticatedRegionsRoute,
+  AuthenticatedReportsRoute: AuthenticatedReportsRoute,
   AuthenticatedMembersIdRoute: AuthenticatedMembersIdRoute,
   AuthenticatedMembersNewRoute: AuthenticatedMembersNewRoute,
   AuthenticatedMembersIndexRoute: AuthenticatedMembersIndexRoute,
